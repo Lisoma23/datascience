@@ -26,6 +26,8 @@ Thumbs.db
 artifacts/*.joblib
 artifacts/*.pkl
 artifacts/*.h5
+artifacts/*.npy
+artifacts/*.json
 
 # Reports generated
 reports/*.html
