@@ -6,9 +6,9 @@ Phase 1 -- Setup & EDA
 
 Phase 2 -- Preprocessing & Feature Engineering
 
-- [ ] Pipeline sklearn (imputation, encoding, scaling)
-- [ ] Feature engineering (ratios, interactions)
-- [ ] Split train/test stratifié
+- [x] Pipeline sklearn (imputation, encoding, scaling)
+- [x] Feature engineering (ratios, interactions)
+- [x] Split train/test stratifié
 
 Phase 3 -- Modélisation
 
