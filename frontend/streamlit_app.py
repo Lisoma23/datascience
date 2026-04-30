@@ -8,13 +8,23 @@ dashboard_page = st.Page(
     default=True
 )
 
-chart_page = st.Page(
-    "pages/chart.py", 
-    title="Chart", 
+prediction_page = st.Page(
+    "pages/prediction.py", 
+    title="Prédiction", 
+)
+
+comparaison_page = st.Page(
+    "pages/comparaison.py", 
+    title="Comparaison des modèles", 
+)
+
+analyse_page = st.Page(
+    "pages/analyse.py", 
+    title="Analyse", 
 )
 
 pg = st.navigation({
-    "Pages": [dashboard_page, chart_page]
+    "Pages": [dashboard_page, prediction_page, comparaison_page, analyse_page]
 })
 pg.run()
 
