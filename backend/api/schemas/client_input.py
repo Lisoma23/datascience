@@ -23,7 +23,7 @@ class ClientInput(BaseModel):
     price_increase_last_3m : str
     support_tickets : int
     avg_resolution_time : float
-    complaint_type : str | None
+    complaint_type : str | None = None
     csat_score : float
     escalations : int
     email_open_rate : float

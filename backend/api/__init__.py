@@ -1,9 +1,12 @@
-from fastapi import FastAPI
-import pandas as pd
+"""API FastAPI — Churn Prediction."""
+
+from fastapi import FastAPI, Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 
 from backend.api.schemas.client_input import ClientInput
-from backend.api.schemas.prediction_output import PredictionOutput 
-from ..data import check_data
+from backend.api.schemas.prediction_output import PredictionOutput
+from backend.data import check_data
 
 app = FastAPI(
     title="Churn Prediction API",
@@ -11,19 +14,43 @@ app = FastAPI(
     version="0.1.0",
 )
 
+
+# ---------------------------------------------------------------------------
+# Error handlers
+# ---------------------------------------------------------------------------
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    return JSONResponse(
+        status_code=422,
+        content={"error": "Données invalides", "details": str(exc)},
+    )
+
+
+# ---------------------------------------------------------------------------
+# Endpoints
+# ---------------------------------------------------------------------------
+
+
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return {"message": "Churn Prediction API"}
+
 
 @app.get("/health")
 def health_check():
-    # Examine the data 
     data_check = check_data()
     if data_check is not None:
-        return {"status": "healthy"}
+        status = "healthy"
     else:
-        return {"status": "unhealthy"}
-    
+        status = "unhealthy"
+    return {
+        "status": status,
+        "model_loaded": False,  # deviendra True quand le modèle sera branché
+    }
+
+
 @app.post("/predict", response_model=PredictionOutput)
 def predict(client: ClientInput):
     # TODO: brancher le vrai modèle (après Tâche B)
