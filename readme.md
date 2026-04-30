@@ -1,6 +1,6 @@
 Phase 1 -- Setup & EDA
 
-- [ ] Initialiser le projet (venv, git, structure de dossiers)
+- [x] Initialiser le projet (venv, git, structure de dossiers)
 - [ ] Charger et auditer le dataset
 - [ ] EDA complète (distributions, corrélations, déséquilibre classes, outliers)
 
@@ -27,7 +27,8 @@ Phase 4 -- Évaluation & Interprétabilité
 
 Phase 5 -- API REST
 
-- [ ] FastAPI avec /predict et /health
+- [ ] FastAPI avec /predict 
+- [x] et /health
 - [ ] Sérialisation du modèle (joblib)
 - [ ] Validation des inputs, gestion d'erreurs
 
@@ -35,6 +36,8 @@ Phase 6 -- Dashboard
 
 - [ ] Streamlit orienté métier (KPIs, prédiction temps réel, simulation scénarios)
 - [ ] Appelle l'API (pas le modèle directement)
-      Phase 7 -- Rapport & Présentation
+
+Phase 7 -- Rapport & Présentation
+
 - [ ] Rapport 6 pages max
 - [ ] Support de présentation
