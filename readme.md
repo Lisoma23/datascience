@@ -1,8 +1,8 @@
 Phase 1 -- Setup & EDA
 
 - [x] Initialiser le projet (venv, git, structure de dossiers)
-- [ ] Charger et auditer le dataset
-- [ ] EDA complète (distributions, corrélations, déséquilibre classes, outliers)
+- [x] Charger et auditer le dataset
+- [x] EDA complète (distributions, corrélations, déséquilibre classes, outliers)
 
 Phase 2 -- Preprocessing & Feature Engineering
 
