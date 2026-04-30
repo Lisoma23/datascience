@@ -1,18 +1,20 @@
 import streamlit as st
 
-
 st.set_page_config(layout="wide")
 
-def dashboard():
-    st.title("Dashboard")
+dashboard_page = st.Page(
+    "pages/dashboard.py", 
+    title="Dashboard", 
+    default=True
+)
 
-def chart():
-    st.title("Chart")
+chart_page = st.Page(
+    "pages/chart.py", 
+    title="Chart", 
+)
 
-pages = [
-    st.Page(dashboard, title="Dashboard"),
-    st.Page(chart, title="Chart"),
-]
-
-pg = st.navigation(pages)
+pg = st.navigation({
+    "Pages": [dashboard_page, chart_page]
+})
 pg.run()
+
