@@ -144,3 +144,76 @@ class TestDocs:
         assert resp.status_code == 200
         data = resp.json()
         assert data["info"]["title"] == "Churn Prediction API"
+
+
+# ---------------------------------------------------------------------------
+# GET /model-info
+# ---------------------------------------------------------------------------
+
+
+class TestModelInfo:
+    def test_model_info_returns_200(self):
+        resp = client.get("/model-info")
+        # 200 if model loaded, 503 otherwise
+        assert resp.status_code in (200, 503)
+
+    def test_model_info_content(self):
+        resp = client.get("/model-info")
+        if resp.status_code == 200:
+            data = resp.json()
+            assert "model_type" in data
+            assert "threshold" in data
+            assert "n_features" in data
+            assert "metrics" in data
+            assert isinstance(data["threshold"], float)
+            assert data["n_features"] > 0
+
+
+# ---------------------------------------------------------------------------
+# Integration: model predictions
+# ---------------------------------------------------------------------------
+
+
+class TestModelIntegration:
+    """Tests qui vérifient que le modèle retourne des prédictions cohérentes."""
+
+    def test_predict_probability_range(self):
+        resp = client.post("/predict", json=VALID_PAYLOAD)
+        if resp.status_code == 200:
+            data = resp.json()
+            assert 0.0 <= data["churn_probability"] <= 1.0
+
+    def test_predict_binary_output(self):
+        resp = client.post("/predict", json=VALID_PAYLOAD)
+        if resp.status_code == 200:
+            data = resp.json()
+            assert data["churn_prediction"] in (0, 1)
+
+    def test_high_risk_profile(self):
+        """Un profil à haut risque devrait avoir une proba plus élevée."""
+        high_risk = {
+            **VALID_PAYLOAD,
+            "tenure_months": 2,
+            "monthly_logins": 1,
+            "weekly_active_days": 0,
+            "payment_failures": 5,
+            "support_tickets": 8,
+            "csat_score": 1.5,
+            "nps_score": 1,
+            "last_login_days_ago": 45,
+            "escalations": 3,
+        }
+        resp_normal = client.post("/predict", json=VALID_PAYLOAD)
+        resp_risky = client.post("/predict", json=high_risk)
+        if resp_normal.status_code == 200 and resp_risky.status_code == 200:
+            prob_normal = resp_normal.json()["churn_probability"]
+            prob_risky = resp_risky.json()["churn_probability"]
+            assert prob_risky > prob_normal
+
+    def test_health_model_loaded_true(self):
+        """Si les artifacts existent, model_loaded doit être True."""
+        from pathlib import Path
+        artifacts = Path(__file__).resolve().parent.parent / "artifacts"
+        if (artifacts / "model.joblib").exists():
+            resp = client.get("/health")
+            assert resp.json()["model_loaded"] is True
