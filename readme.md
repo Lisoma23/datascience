@@ -12,25 +12,24 @@ Phase 2 -- Preprocessing & Feature Engineering
 
 Phase 3 -- Modélisation
 
-- [ ] Baseline (Logistic Regression)
-- [ ] Random Forest
-- [ ] Gradient Boosting (XGBoost/LightGBM)
-- [ ] MLP (Deep Learning optionnel)
-- [ ] Cross-validation stratifiée + gestion déséquilibre
+- [x] Baseline (Logistic Regression)
+- [x] Random Forest
+- [x] Gradient Boosting (sklearn)
+- [x] Cross-validation stratifiée + gestion déséquilibre (SMOTE, class_weight, seuil)
 
 Phase 4 -- Évaluation & Interprétabilité
 
-- [ ] Comparaison structurée (tableau, graphes)
-- [ ] Analyse d'erreurs (matrice de confusion, résidus)
-- [ ] Feature Importance + SHAP
-- [ ] Sélection et justification du modèle final
+- [x] Comparaison structurée (tableau, graphes)
+- [x] Analyse d'erreurs (matrice de confusion, profiling FN)
+- [x] Feature Importance + SHAP
+- [x] Sélection et justification du modèle final
 
 Phase 5 -- API REST
 
-- [ ] FastAPI avec /predict 
-- [x] et /health
-- [ ] Sérialisation du modèle (joblib)
-- [ ] Validation des inputs, gestion d'erreurs
+- [x] FastAPI avec /predict et /health
+- [x] /model-info (métadonnées du modèle)
+- [x] Sérialisation du modèle (joblib)
+- [x] Validation des inputs, gestion d'erreurs
 
 Phase 6 -- Dashboard
 
