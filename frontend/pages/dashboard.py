@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 from pathlib import Path
+import requests
 
 _CSV_PATH = Path(__file__).resolve().parent.parent.parent
 csv_path = _CSV_PATH / "customer_churn.csv"
@@ -75,33 +76,84 @@ with row2_col2:
 
 # --- CLIENTS À RISQUE ---
 st.divider()
+
+def get_risk_scores(current_customers_df):
+    
+    risk_scores = []
+    url = 'http://127.0.0.1:8000/predict'
+    
+    # barre de progression car l'appel en boucle peut prendre du temps
+    progress_bar = st.progress(0, text="Analyse du risque via l'IA...")
+    
+    # Limité à 50 pour le test de performance
+    total = len(current_customers_df.head(50)) 
+    
+    for i, (index, row) in enumerate(current_customers_df.head(50).iterrows()):
+        payload = {
+            "gender": row['gender'],
+            "age": row['age'],
+            "country": row['country'],
+            "city": row['city'],
+            "customer_segment": row['customer_segment'],
+            "tenure_months": row['tenure_months'],
+            "signup_channel": row['signup_channel'],
+            "contract_type": row['contract_type'],
+            "monthly_logins": row['monthly_logins'],
+            "weekly_active_days": row['weekly_active_days'],
+            "avg_session_time": row['avg_session_time'],
+            "features_used": row['features_used'],
+            "usage_growth_rate": row['usage_growth_rate'],
+            "last_login_days_ago": row['last_login_days_ago'],
+            "monthly_fee": row['monthly_fee'],
+            "total_revenue": row['total_revenue'],
+            "payment_method": row['payment_method'],
+            "payment_failures": row['payment_failures'],
+            "discount_applied": row['discount_applied'],
+            "price_increase_last_3m": row['price_increase_last_3m'],
+            "support_tickets": row['support_tickets'],
+            "avg_resolution_time": row['avg_resolution_time'],
+            "complaint_type": row['complaint_type'] if pd.notna(row['complaint_type']) else "None",
+            "csat_score": float(row['csat_score']),
+            "escalations": row['escalations'],
+            "email_open_rate": row['email_open_rate'],
+            "marketing_click_rate": row['marketing_click_rate'],
+            "nps_score": row['nps_score'],
+            "survey_response": row['survey_response'],
+            "referral_count": row['referral_count']
+        }
+        
+        try:
+            response = requests.post(url, json=payload)
+            if response.status_code == 200:
+                prob = response.json().get("churn_probability", 0)
+                risk_scores.append(prob)
+            else:
+                risk_scores.append(0)
+        except:
+            risk_scores.append(0)
+            
+        progress_bar.progress((i + 1) / total)
+    
+    progress_bar.empty() 
+    return risk_scores
+
 st.header(" Clients à haut risque")
 
-customers_at_risk = df[df['churn'] == 0].copy()
+current_customers = df[df['churn'] == 0].copy().head(50)
 
-# Calcul d'un score de risque simple pour le tri
-customers_at_risk['risk_score'] = (
-    (5 - customers_at_risk['csat_score']) * 2 + 
-    customers_at_risk['support_tickets'] + 
-    customers_at_risk['escalations'] * 2
-)
+current_customers['risk_score'] = get_risk_scores(current_customers)
 
-# Tri par score de risque
-top_risk_df = customers_at_risk.sort_values(by='risk_score', ascending=False).head(10)
+top_risk_df = current_customers.sort_values(by='risk_score', ascending=False).head(10)
 
-# Sélection des colonnes pour l'affichage
 display_columns = [
-    'customer_id', 'customer_segment', 'tenure_months', 
-    'csat_score', 'support_tickets', 'escalations', 'monthly_fee'
+    'customer_id', 'risk_score', 'customer_segment', 'tenure_months', 
+    'csat_score', 'support_tickets', 'monthly_fee'
 ]
 
 st.dataframe(
-    top_risk_df[display_columns].style.background_gradient(
-        subset=['csat_score'], cmap='RdYlGn', vmin=1, 
-        vmax=5
-    ).background_gradient(
-        subset=['support_tickets', 'escalations'], cmap='OrRd'
-    ),
+    top_risk_df[display_columns].style.format({'risk_score': '{:.1%}'})
+    .background_gradient(subset=['risk_score'], cmap='OrRd')
+    .background_gradient(subset=['csat_score'], cmap='RdYlGn', vmin=1, vmax=5),
     width="stretch",
     hide_index=True
 )

@@ -18,7 +18,7 @@ st.write("""
 """)
 
 
-if feature_importance_path:
+if feature_importance_path.exists():
     st.image(feature_importance_path, caption="Classement des variables par importance")
 else:
     # Placeholder si l'image n'existe pas 
@@ -33,7 +33,7 @@ st.write("""
 """)
 
 
-if shap_summary_path:
+if shap_summary_path.exists():
     st.image(shap_summary_path, caption="SHAP Summary Plot")
 else:
     # Placeholder si l'image n'existe pas 

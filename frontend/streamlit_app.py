@@ -18,13 +18,18 @@ comparaison_page = st.Page(
     title="Comparaison des modèles", 
 )
 
+simulation_page = st.Page(
+    "pages/simulation.py", 
+    title="Simulateur de Scénarios", 
+)
+
 analyse_page = st.Page(
     "pages/analyse.py", 
     title="Analyse", 
 )
 
 pg = st.navigation({
-    "Pages": [dashboard_page, prediction_page, comparaison_page, analyse_page]
+    "Pages": [dashboard_page, prediction_page, comparaison_page, simulation_page, analyse_page]
 })
 pg.run()
 
