@@ -7,7 +7,6 @@ from pathlib import Path
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 url_api = 'http://127.0.0.1:8000/predict'
 
-st.set_page_config(page_title="Simulateur de Scénarios", layout="wide")
 
 st.title("Simulateur de Scénarios de Churn")
 st.subheader("Modifiez les paramètres pour tester l'impact sur la fidélité client")

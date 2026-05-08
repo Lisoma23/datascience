@@ -77,7 +77,7 @@ with row2_col2:
 # --- CLIENTS À RISQUE ---
 st.divider()
 
-def get_risk_scores(current_customers_df):
+def get_risk_scores(current_customers_df, n_to_analyze):
     
     risk_scores = []
     url = 'http://127.0.0.1:8000/predict'
@@ -85,10 +85,11 @@ def get_risk_scores(current_customers_df):
     # barre de progression car l'appel en boucle peut prendre du temps
     progress_bar = st.progress(0, text="Analyse du risque via l'IA...")
     
-    # Limité à 50 pour le test de performance
-    total = len(current_customers_df.head(50)) 
+    # Choix du user
+    subset = current_customers_df.head(n_to_analyze)
+    total = len(subset)
     
-    for i, (index, row) in enumerate(current_customers_df.head(50).iterrows()):
+    for i, (index, row) in enumerate(subset.iterrows()):        
         payload = {
             "gender": row['gender'],
             "age": row['age'],
@@ -112,7 +113,7 @@ def get_risk_scores(current_customers_df):
             "price_increase_last_3m": row['price_increase_last_3m'],
             "support_tickets": row['support_tickets'],
             "avg_resolution_time": row['avg_resolution_time'],
-            "complaint_type": row['complaint_type'] if pd.notna(row['complaint_type']) else "None",
+            "complaint_type": row['complaint_type'] if pd.notna(row['complaint_type']) else None,            
             "csat_score": float(row['csat_score']),
             "escalations": row['escalations'],
             "email_open_rate": row['email_open_rate'],
@@ -128,7 +129,7 @@ def get_risk_scores(current_customers_df):
                 prob = response.json().get("churn_probability", 0)
                 risk_scores.append(prob)
             else:
-                risk_scores.append(0)
+                risk_scores.append(None)
         except:
             risk_scores.append(0)
             
@@ -139,9 +140,13 @@ def get_risk_scores(current_customers_df):
 
 st.header(" Clients à haut risque")
 
-current_customers = df[df['churn'] == 0].copy().head(50)
+n_analysis = st.slider("Nombre de clients à analyser", 10, 200, 50)
 
-current_customers['risk_score'] = get_risk_scores(current_customers)
+current_customers_base = df[df['churn'] == 0].copy()
+
+current_customers = current_customers_base.head(n_analysis).copy()
+
+current_customers['risk_score'] = get_risk_scores(current_customers, n_analysis)
 
 top_risk_df = current_customers.sort_values(by='risk_score', ascending=False).head(10)
 
