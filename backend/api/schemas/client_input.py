@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 
+
 class ClientInput(BaseModel):
     gender: str
     age: int

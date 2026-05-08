@@ -1,8 +1,9 @@
 """Tests de modélisation — skippés en CI si artifacts absents."""
 
-import pytest
-import numpy as np
 from pathlib import Path
+
+import numpy as np
+import pytest
 
 ARTIFACTS_DIR = Path(__file__).resolve().parent.parent / "artifacts"
 MODEL_PATH = ARTIFACTS_DIR / "model.joblib"
@@ -37,6 +38,7 @@ class TestEndToEnd:
 
     def test_pipeline_predict(self):
         import joblib
+
         from backend.data.preprocessing import load_and_split
 
         model = joblib.load(MODEL_PATH)
@@ -51,6 +53,7 @@ class TestEndToEnd:
 
     def test_predict_proba_range(self):
         import joblib
+
         from backend.data.preprocessing import load_and_split
 
         model = joblib.load(MODEL_PATH)
