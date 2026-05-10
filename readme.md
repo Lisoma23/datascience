@@ -2,47 +2,65 @@
 
 ![CI](https://github.com/Lisoma23/datascience/actions/workflows/ci.yml/badge.svg)
 
-## Avancement
+Système de prédiction du churn client basé sur le Machine Learning, avec API REST et dashboard interactif.
 
-Phase 1 -- Setup & EDA
+## Quickstart
 
-- [x] Initialiser le projet (venv, git, structure de dossiers)
-- [x] Charger et auditer le dataset
-- [x] EDA complète (distributions, corrélations, déséquilibre classes, outliers)
+```bash
+make install       # Crée le venv et installe les dépendances
+make train         # Entraîne les modèles et génère les artifacts
+make api           # Lance l'API FastAPI (localhost:8000)
+make dashboard     # Lance le dashboard Streamlit (localhost:8501)
+```
 
-Phase 2 -- Preprocessing & Feature Engineering
+## Structure du projet
 
-- [x] Pipeline sklearn (imputation, encoding, scaling)
-- [x] Feature engineering (ratios, interactions)
-- [x] Split train/test stratifié
+```
+├── backend/
+│   ├── api/              # API FastAPI (/predict, /health, /model-info)
+│   ├── data/             # Module de preprocessing réutilisable
+│   └── models/           # Script d'entraînement
+├── frontend/
+│   ├── streamlit_app.py  # Point d'entrée du dashboard
+│   └── pages/            # Pages Streamlit (dashboard, prédiction, comparaison, simulation, analyse)
+├── notebooks/
+│   ├── 01_eda.ipynb              # Analyse exploratoire
+│   ├── 02_preprocessing.ipynb    # Feature engineering
+│   └── 03_modeling.ipynb         # Modélisation, évaluation, SHAP
+├── reports/figures/      # Graphiques générés (ROC, SHAP, feature importance, etc.)
+├── tests/                # Tests pytest (preprocessing, API, modeling)
+├── artifacts/            # Modèle sérialisé, seuil, métriques (gitignored)
+├── customer_churn.csv    # Dataset source (10 000 clients, 32 variables)
+├── Makefile
+├── requirements.txt
+└── pyproject.toml        # Config ruff + pytest
+```
 
-Phase 3 -- Modélisation
+## Pipeline
 
-- [x] Baseline (Logistic Regression)
-- [x] Random Forest
-- [x] Gradient Boosting (sklearn)
-- [x] Cross-validation stratifiée + gestion déséquilibre (SMOTE, class_weight, seuil)
+1. **Preprocessing** — Pipeline sklearn (`ColumnTransformer`) avec feature engineering, split stratifié 80/20, pas de data leakage
+2. **Modélisation** — 3 modèles comparés : Logistic Regression, Random Forest, Gradient Boosting
+3. **Évaluation** — Métriques : Recall, F1, ROC-AUC, PR-AUC. Gestion du déséquilibre via SMOTE + ajustement du seuil
+4. **Interprétabilité** — Feature Importance + SHAP
+5. **API** — FastAPI avec endpoints `/predict`, `/health`, `/model-info`
+6. **Dashboard** — Streamlit 5 pages : KPIs, prédiction temps réel, comparaison des modèles, simulateur de scénarios, analyse SHAP
 
-Phase 4 -- Évaluation & Interprétabilité
+## Modèle en production
 
-- [x] Comparaison structurée (tableau, graphes)
-- [x] Analyse d'erreurs (matrice de confusion, profiling FN)
-- [x] Feature Importance + SHAP
-- [x] Sélection et justification du modèle final
+- **Algorithme** : GradientBoostingClassifier (scikit-learn)
+- **Seuil de décision** : 0.10 (optimisé pour maximiser le F1)
+- **ROC-AUC** : 0.796
+- **Hyperparamètres** : `n_estimators=500`, `learning_rate=0.05`, `max_depth=8`, `min_samples_leaf=20`, `subsample=0.8`
 
-Phase 5 -- API REST
+## Tests & CI
 
-- [x] FastAPI avec /predict et /health
-- [x] /model-info (métadonnées du modèle)
-- [x] Sérialisation du modèle (joblib)
-- [x] Validation des inputs, gestion d'erreurs
+```bash
+make test          # Lance pytest
+make lint          # Lance ruff
+```
 
-Phase 6 -- Dashboard
+CI GitHub Actions : ruff + pytest sur chaque push/PR vers main.
 
-- [ ] Streamlit orienté métier (KPIs, prédiction temps réel, simulation scénarios)
-- [ ] Appelle l'API (pas le modèle directement)
+## Équipe
 
-Phase 7 -- Rapport & Présentation
-
-- [ ] Rapport 6 pages max
-- [ ] Support de présentation
+Charrier Faustine, Hazami Sofia, Ladjoui Miriam, Tchitoula Louisan

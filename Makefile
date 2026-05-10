@@ -6,7 +6,7 @@ install:
 	.venv/bin/pip install -r requirements.txt
 
 train:
-	.venv/bin/python -m backend.models.train
+	.venv/bin/jupyter nbconvert --to notebook --execute notebooks/03_modeling.ipynb --output 03_modeling.ipynb
 
 api:
 	.venv/bin/uvicorn backend.api:app --reload --port 8000
@@ -18,8 +18,8 @@ lint:
 	ruff check backend/ tests/ frontend/
 
 dashboard:
-	streamlit run frontend/streamlit_app.py
+	.venv/bin/streamlit run frontend/streamlit_app.py
 
 clean:
 	find . -type d -name __pycache__ -exec rm -rf {} +
-	rm -rf artifacts/*.joblib artifacts/*.pkl
+	rm -rf artifacts/*.joblib artifacts/*.json
