@@ -7,7 +7,6 @@ import logging
 from pathlib import Path
 
 import joblib
-
 import pandas as pd
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError

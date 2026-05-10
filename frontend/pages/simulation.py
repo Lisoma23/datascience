@@ -1,8 +1,9 @@
-import streamlit as st
-import pandas as pd
-import requests
-import plotly.express as px
 from pathlib import Path
+
+import pandas as pd
+import plotly.express as px
+import requests
+import streamlit as st
 
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 url_api = 'http://127.0.0.1:8000/predict'
@@ -56,10 +57,10 @@ with st.sidebar:
         "Frais Mensuels ($)", 10.0, 250.0, float(default_profile["monthly_fee"]), step=1.0
     )
     simulated_profile["discount_applied"] = st.radio(
-        "Accorder une remise ?", ["No", "Yes"], 
+        "Accorder une remise ?", ["No", "Yes"],
         index=0 if default_profile["discount_applied"] == "No" else 1
     )
-    
+
     st.divider()
     st.markdown("### Engagement & Usage")
     simulated_profile["usage_growth_rate"] = st.slider(
@@ -68,7 +69,7 @@ with st.sidebar:
     simulated_profile["referral_count"] = st.number_input(
         "Nombre de parrainages", 0, 50, int(default_profile["referral_count"])
     )
-    
+
     st.divider()
     st.markdown("### Support & Satisfaction")
     # Correction de l'erreur types : min/max/value/step sont TOUS en float
@@ -86,7 +87,7 @@ def get_churn_prediction(profile_data):
         if response.status_code == 200:
             return response.json().get("churn_probability", 0.0)
         return 0.0
-    except:
+    except Exception:
         return 0.0
 
 # --- CALCULS ET COMPARAISON ---
@@ -115,7 +116,7 @@ with col_graph:
         "Scénario": ["Initial", "Simulé"],
         "Probabilité de Churn (%)": [prob_initiale * 100, prob_simulee * 100]
     })
-    
+
     fig = px.bar(
         chart_data, x="Scénario", y="Probabilité de Churn (%)",
         color="Scénario",
@@ -133,7 +134,7 @@ with col_txt:
         """)
     elif diff > 0.05:
         st.error("""
-        **Risqué** : Ce scénario augmente la probabilité que le client nous quitte. 
+        **Risqué** : Ce scénario augmente la probabilité que le client nous quitte.
         """)
     else:
         st.info("L'impact de ces changements n'est pas impactant sur la prédiction du modèle.")

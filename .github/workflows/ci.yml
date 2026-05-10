@@ -26,7 +26,7 @@ jobs:
           pip install pytest
 
       - name: Lint with ruff
-        run: ruff check backend/ tests/
+        run: ruff check backend/ tests/ frontend/
 
       - name: Run tests
         run: pytest tests/ -v --tb=short

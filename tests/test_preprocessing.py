@@ -177,8 +177,7 @@ class TestBuildPreprocessor:
 
     def test_scaling_mean_std(self, fitted_preprocessor):
         """Les features numeriques doivent etre centrees-reduites."""
-        preprocessor, X_train_t, _ = fitted_preprocessor
-        
+        _, X_train_t, _ = fitted_preprocessor
         n_num = len(NUM_COLS + ENGINEERED_COLS)
         num_data = X_train_t[:, :n_num]
         means = num_data.mean(axis=0)

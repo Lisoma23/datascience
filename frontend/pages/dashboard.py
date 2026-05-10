@@ -1,8 +1,9 @@
-import streamlit as st
+from pathlib import Path
+
 import pandas as pd
 import plotly.express as px
-from pathlib import Path
 import requests
+import streamlit as st
 
 _CSV_PATH = Path(__file__).resolve().parent.parent.parent
 csv_path = _CSV_PATH / "customer_churn.csv"
@@ -36,7 +37,7 @@ row1_col1, row1_col2 = st.columns(2)
 
 with row1_col1:
     fig_pie = px.pie(
-        df, names='churn', 
+        df, names='churn',
         title="Répartition Churn vs Non-Churn",
         color='churn',
         color_discrete_map=colors,
@@ -47,7 +48,7 @@ with row1_col1:
 with row1_col2:
     # Tri pour avoir une meilleure lecture
     fig_seg = px.histogram(
-        df, x="customer_segment", color="churn", 
+        df, x="customer_segment", color="churn",
         title="Churn par Segment Client",
         barmode="group",
         color_discrete_map=colors,
@@ -58,7 +59,7 @@ row2_col1, row2_col2 = st.columns(2)
 
 with row2_col1:
     fig_contract = px.histogram(
-        df, x="contract_type", color="churn", 
+        df, x="contract_type", color="churn",
         title="Churn par Type de Contrat",
         barmode="group",
         color_discrete_map=colors
@@ -78,18 +79,18 @@ with row2_col2:
 st.divider()
 
 def get_risk_scores(current_customers_df, n_to_analyze):
-    
+
     risk_scores = []
     url = 'http://127.0.0.1:8000/predict'
-    
+
     # barre de progression car l'appel en boucle peut prendre du temps
     progress_bar = st.progress(0, text="Analyse du risque via l'IA...")
-    
+
     # Choix du user
     subset = current_customers_df.head(n_to_analyze)
     total = len(subset)
-    
-    for i, (index, row) in enumerate(subset.iterrows()):        
+
+    for i, (index, row) in enumerate(subset.iterrows()):
         payload = {
             "gender": row['gender'],
             "age": row['age'],
@@ -113,7 +114,7 @@ def get_risk_scores(current_customers_df, n_to_analyze):
             "price_increase_last_3m": row['price_increase_last_3m'],
             "support_tickets": row['support_tickets'],
             "avg_resolution_time": row['avg_resolution_time'],
-            "complaint_type": row['complaint_type'] if pd.notna(row['complaint_type']) else None,            
+            "complaint_type": row['complaint_type'] if pd.notna(row['complaint_type']) else None,
             "csat_score": float(row['csat_score']),
             "escalations": row['escalations'],
             "email_open_rate": row['email_open_rate'],
@@ -122,7 +123,7 @@ def get_risk_scores(current_customers_df, n_to_analyze):
             "survey_response": row['survey_response'],
             "referral_count": row['referral_count']
         }
-        
+
         try:
             response = requests.post(url, json=payload)
             if response.status_code == 200:
@@ -130,12 +131,12 @@ def get_risk_scores(current_customers_df, n_to_analyze):
                 risk_scores.append(prob)
             else:
                 risk_scores.append(None)
-        except:
-            risk_scores.append(0)
-            
+        except Exception:
+            risk_scores.append(None)
+
         progress_bar.progress((i + 1) / total)
-    
-    progress_bar.empty() 
+
+    progress_bar.empty()
     return risk_scores
 
 st.header(" Clients à haut risque")
@@ -151,7 +152,7 @@ current_customers['risk_score'] = get_risk_scores(current_customers, n_analysis)
 top_risk_df = current_customers.sort_values(by='risk_score', ascending=False).head(10)
 
 display_columns = [
-    'customer_id', 'risk_score', 'customer_segment', 'tenure_months', 
+    'customer_id', 'risk_score', 'customer_segment', 'tenure_months',
     'csat_score', 'support_tickets', 'monthly_fee'
 ]
 

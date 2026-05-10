@@ -1,6 +1,6 @@
-import streamlit as st
-import os
 from pathlib import Path
+
+import streamlit as st
 
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -13,7 +13,7 @@ st.subheader("Quels facteurs influencent le plus le départ de vos clients ?")
 
 st.markdown("### Importance Globale (Feature Importance)")
 st.write("""
-    Ce graphique montre l'importance relative de chaque variable dans les décisions du modèle. 
+    Ce graphique montre l'importance relative de chaque variable dans les décisions du modèle.
     Plus la barre est longue, plus la variable a un impact sur la prédiction finale.
 """)
 
@@ -21,14 +21,14 @@ st.write("""
 if feature_importance_path.exists():
     st.image(feature_importance_path, caption="Classement des variables par importance")
 else:
-    # Placeholder si l'image n'existe pas 
+    # Placeholder si l'image n'existe pas
     st.image("https://placehold.co/800x400?text=Feature+Importance+Placeholder", width="stretch")
 
 st.divider()
 
 st.markdown("### Analyse SHAP (Interprétabilité Locale & Globale)")
 st.write("""
-    Le graphique SHAP explique comment chaque valeur impacte positivement ou négativement la probabilité de churn. 
+    Le graphique SHAP explique comment chaque valeur impacte positivement ou négativement la probabilité de churn.
     *Le rouge indique une valeur élevée de la variable, le bleu une valeur basse.*
 """)
 
@@ -36,7 +36,7 @@ st.write("""
 if shap_summary_path.exists():
     st.image(shap_summary_path, caption="SHAP Summary Plot")
 else:
-    # Placeholder si l'image n'existe pas 
+    # Placeholder si l'image n'existe pas
     st.image("https://placehold.co/800x400?text=SHAP+Summary+Placeholder", width="stretch")
 
 st.divider()
