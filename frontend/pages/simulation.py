@@ -36,7 +36,7 @@ default_profile = {
     "price_increase_last_3m": "No",
     "support_tickets": 1,
     "avg_resolution_time": 5.0,
-    "complaint_type": "None",
+    "complaint_type": None,
     "csat_score": 4.0,
     "escalations": 0,
     "email_open_rate": 0.4,
@@ -86,13 +86,18 @@ def get_churn_prediction(profile_data):
         response = requests.post(url_api, json=profile_data)
         if response.status_code == 200:
             return response.json().get("churn_probability", 0.0)
-        return 0.0
-    except Exception:
-        return 0.0
+        st.warning(f"Erreur API ({response.status_code})")
+        return None
+    except requests.exceptions.ConnectionError:
+        st.warning("API indisponible — lancez le serveur avec `make api`")
+        return None
 
 # --- CALCULS ET COMPARAISON ---
 prob_initiale = get_churn_prediction(default_profile)
 prob_simulee = get_churn_prediction(simulated_profile)
+
+if prob_initiale is None or prob_simulee is None:
+    st.stop()
 
 col1, col2, col3 = st.columns(3)
 
