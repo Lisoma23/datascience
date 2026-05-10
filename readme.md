@@ -1,3 +1,9 @@
+# Système Intelligent de Rétention Client
+
+![CI](https://github.com/Lisoma23/datascience/actions/workflows/ci.yml/badge.svg)
+
+## Avancement
+
 Phase 1 -- Setup & EDA
 
 - [x] Initialiser le projet (venv, git, structure de dossiers)

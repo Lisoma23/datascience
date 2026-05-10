@@ -1,21 +1,21 @@
-import streamlit as st
 import requests
+import streamlit as st
 
 st.title("Prédiction du Churn en Temps Réel")
 st.subheader("Simulez un profil client pour évaluer son risque de départ")
 
 with st.form("prediction_form"):
-    
+
     st.markdown("### Informations Client & Contrat")
     col1, col2 = st.columns(2)
-    
+
     with col1:
         st.write("**Démographie**")
         age = st.number_input("Âge", min_value=18, max_value=100, value=35)
         gender = st.selectbox("Genre", ["Male", "Female"])
         country = st.selectbox("Pays", ["UK", "USA", "Canada", "Germany", "India", "Australia", "Bangladesh"])
         city = st.text_input("Ville", value="London")
-        
+
     with col2:
         st.write("**Contrat**")
         tenure = st.number_input("Ancienneté (mois)", min_value=0, value=12)
@@ -28,7 +28,7 @@ with st.form("prediction_form"):
 
     st.markdown("### Usage & Engagement")
     col3, col4 = st.columns(2)
-    
+
     with col3:
         st.write("**Statistiques d'utilisation**")
         logins = st.number_input("Connexions mensuelles", value=20)
@@ -36,7 +36,7 @@ with st.form("prediction_form"):
         session_time = st.number_input("Temps moyen de session (min)", value=15.0)
         last_login = st.number_input("Dernière connexion (jours)", value=2)
         growth_rate = st.slider("Taux de croissance de l'usage (%)", -100, 100, 0)
-        
+
     with col4:
         st.write("**Marketing & Social**")
         email_rate = st.slider("Taux d'ouverture email (%)", 0, 100, 25)
@@ -48,14 +48,14 @@ with st.form("prediction_form"):
 
     st.markdown("### Finance & Satisfaction")
     col5, col6 = st.columns(2)
-    
+
     with col5:
         st.write("**Données Financières**")
         monthly_fee = st.number_input("Frais mensuels ($)", value=30)
         total_rev = st.number_input("Revenu total généré ($)", value=500)
         discount = st.radio("Remise appliquée ?", ["No", "Yes"], horizontal=True)
         failures = st.number_input("Échecs de paiement", value=0)
-        price_inc = st.selectbox("Augmentation de prix (3m) ?", ["No", "Yes"])     
+        price_inc = st.selectbox("Augmentation de prix (3m) ?", ["No", "Yes"])
 
     with col6:
         st.write("**Satisfaction (KPIs Clés)**")
@@ -111,32 +111,33 @@ if submit_button:
             response = requests.post(url, json=data_to_send)
             if response.status_code == 200:
                 prediction_data = response.json()
-                
+
                 prob = prediction_data["churn_probability"] * 100
                 is_churn = prediction_data["churn_prediction"] == 1
-                
+
                 statut = "CHURN" if is_churn else "NON-CHURN"
                 couleur = "#FF4B4B" if is_churn else "#28A745"
 
                 col_res1, col_res2 = st.columns([1, 2])
-                
+
                 with col_res1:
                     st.markdown("### Prédiction")
                     st.markdown(
                         f"<div style='padding: 10px; border-radius:10px; background-color:{couleur}; "
-                        f"color:white; text-align:center; font-weight:bold;'>{statut}</div>", 
+                        f"color:white; text-align:center; font-weight:bold;'>{statut}</div>",
                         unsafe_allow_html=True
                     )
 
                 with col_res2:
                     st.markdown(f"### Probabilité : {prob:.1f}%")
-                    st.markdown(f"""
-                                <div style="width: 100%; background-color: #f0f2f6; border-radius: 10px; margin-top:15px;">
-                                <div style="width: {prob}%; background-color: {couleur}; 
-                                height: 15px; border-radius: 10px; transition: width 0.5s;">
-                                </div>
-                                </div>
-                                """, unsafe_allow_html=True)
+                    bar_html = (
+                        '<div style="width: 100%; background-color: #f0f2f6;'
+                        ' border-radius: 10px; margin-top:15px;">'
+                        f'<div style="width: {prob}%; background-color: {couleur};'
+                        ' height: 15px; border-radius: 10px; transition: width 0.5s;">'
+                        '</div></div>'
+                    )
+                    st.markdown(bar_html, unsafe_allow_html=True)
 
                 if is_churn:
                     st.warning("Attention : Risque de churn détecté.")

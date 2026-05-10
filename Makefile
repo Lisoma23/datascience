@@ -1,4 +1,4 @@
-.PHONY: install train api test clean
+.PHONY: install train api test lint dashboard clean
 
 install:
 	python3 -m venv .venv
@@ -9,10 +9,16 @@ train:
 	.venv/bin/python -m backend.models.train
 
 api:
-	.venv/bin/uvicorn backend.api.main:app --reload --port 8000
+	.venv/bin/uvicorn backend.api:app --reload --port 8000
 
 test:
 	.venv/bin/python -m pytest tests/ -v
+
+lint:
+	ruff check backend/ tests/ frontend/
+
+dashboard:
+	streamlit run frontend/streamlit_app.py
 
 clean:
 	find . -type d -name __pycache__ -exec rm -rf {} +

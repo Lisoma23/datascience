@@ -1,6 +1,7 @@
 # fichier pour importer et checker les données du .csv
-import pandas as pd
 from pathlib import Path
+
+import pandas as pd
 
 _CSV_PATH = Path(__file__).resolve().parent.parent.parent / "customer_churn.csv"
 
