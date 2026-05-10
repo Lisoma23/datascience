@@ -6,6 +6,8 @@ install:
 	.venv/bin/pip install -r requirements.txt
 
 train:
+	.venv/bin/jupyter nbconvert --to notebook --execute notebooks/01_eda.ipynb --output 01_eda.ipynb
+	.venv/bin/jupyter nbconvert --to notebook --execute notebooks/02_preprocessing.ipynb --output 02_preprocessing.ipynb
 	.venv/bin/jupyter nbconvert --to notebook --execute notebooks/03_modeling.ipynb --output 03_modeling.ipynb
 
 api:

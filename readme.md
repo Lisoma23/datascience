@@ -6,11 +6,22 @@ Système de prédiction du churn client basé sur le Machine Learning, avec API 
 
 ## Quickstart
 
+### macOS / Linux
+
 ```bash
 make install       # Crée le venv et installe les dépendances
-make train         # Entraîne les modèles et génère les artifacts
+make train         # Exécute les 3 notebooks et génère les artifacts
 make api           # Lance l'API FastAPI (localhost:8000)
 make dashboard     # Lance le dashboard Streamlit (localhost:8501)
+```
+
+### Windows
+
+```cmd
+make.bat install       # Crée le venv et installe les dépendances
+make.bat train         # Exécute les 3 notebooks et génère les artifacts
+make.bat api           # Lance l'API FastAPI (localhost:8000)
+make.bat dashboard     # Lance le dashboard Streamlit (localhost:8501)
 ```
 
 ## Structure du projet
@@ -31,7 +42,8 @@ make dashboard     # Lance le dashboard Streamlit (localhost:8501)
 ├── tests/                # Tests pytest (preprocessing, API, modeling)
 ├── artifacts/            # Modèle sérialisé, seuil, métriques (gitignored)
 ├── customer_churn.csv    # Dataset source (10 000 clients, 32 variables)
-├── Makefile
+├── Makefile              # Commandes macOS / Linux
+├── make.bat              # Commandes Windows
 ├── requirements.txt
 └── pyproject.toml        # Config ruff + pytest
 ```
@@ -54,9 +66,18 @@ make dashboard     # Lance le dashboard Streamlit (localhost:8501)
 
 ## Tests & CI
 
+### macOS / Linux
+
 ```bash
 make test          # Lance pytest
 make lint          # Lance ruff
+```
+
+### Windows
+
+```cmd
+make.bat test      # Lance pytest
+make.bat lint      # Lance ruff
 ```
 
 CI GitHub Actions : ruff + pytest sur chaque push/PR vers main.
