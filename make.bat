@@ -32,7 +32,7 @@ goto end
 goto end
 
 :lint
-ruff check backend/ tests/ frontend/
+.venv\Scripts\ruff check backend/ tests/ frontend/
 goto end
 
 :dashboard
