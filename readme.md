@@ -6,22 +6,24 @@ Système de prédiction du churn client basé sur le Machine Learning, avec API 
 
 ## Quickstart
 
+Les artifacts (modèle, seuil, métriques, figures) sont déjà inclus dans le repo. `make train` n'est nécessaire que pour les régénérer.
+
 ### macOS / Linux
 
 ```bash
 make install       # Crée le venv et installe les dépendances
-make train         # Exécute les 3 notebooks et génère les artifacts
 make api           # Lance l'API FastAPI (localhost:8000)
 make dashboard     # Lance le dashboard Streamlit (localhost:8501)
+make train         # (optionnel) Ré-exécute les 3 notebooks et régénère les artifacts
 ```
 
 ### Windows
 
 ```cmd
 make.bat install       # Crée le venv et installe les dépendances
-make.bat train         # Exécute les 3 notebooks et génère les artifacts
 make.bat api           # Lance l'API FastAPI (localhost:8000)
 make.bat dashboard     # Lance le dashboard Streamlit (localhost:8501)
+make.bat train         # (optionnel) Ré-exécute les 3 notebooks et régénère les artifacts
 ```
 
 ## Structure du projet
