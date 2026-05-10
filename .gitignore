@@ -22,13 +22,6 @@ env/
 .DS_Store
 Thumbs.db
 
-# Artifacts (models, metrics) - tracked separately
-artifacts/*.joblib
-artifacts/*.pkl
-artifacts/*.h5
-artifacts/*.npy
-artifacts/*.json
-
 # Reports generated
 reports/*.html
 
