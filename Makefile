@@ -17,7 +17,7 @@ test:
 	.venv/bin/python -m pytest tests/ -v
 
 lint:
-	ruff check backend/ tests/ frontend/
+	.venv/bin/ruff check backend/ tests/ frontend/
 
 dashboard:
 	.venv/bin/streamlit run frontend/streamlit_app.py

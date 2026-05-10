@@ -84,6 +84,40 @@ make.bat lint      # Lance ruff
 
 CI GitHub Actions : ruff + pytest sur chaque push/PR vers main.
 
+## Screenshots
+
+### Dashboard — KPIs & graphiques
+
+![KPIs et graphiques](screenshots/kpis_graph.png)
+
+![Graphiques suite](screenshots/graph_suite.png)
+
+### Dashboard — Clients à haut risque
+
+![Clients à risque](screenshots/clients_a_risques.png)
+
+### Prédiction temps réel
+
+![Infos client](screenshots/prediction_infos_clients.png)
+
+![Usage & engagement](screenshots/prediction_usage.png)
+
+![Finance & résultats](screenshots/prediction_finance_resultats.png)
+
+### Comparaison des modèles
+
+![Courbes ROC & PR](screenshots/comparaison_roc.png)
+
+![Comparaison globale](screenshots/comparaison_globale.png)
+
+### Simulateur de scénarios
+
+![Simulateur](screenshots/simulation.png)
+
+### API Swagger — /predict
+
+![API](screenshots/api_swagger.png)
+
 ## Équipe
 
 Charrier Faustine, Hazami Sofia, Ladjoui Miriam, Tchitoula Louisan
