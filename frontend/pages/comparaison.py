@@ -76,7 +76,7 @@ st.divider()
 
 # Comparaison des modèles
 st.markdown("### Comparaison Globale")
-bar_chart_comparison_path = ROOT_DIR / "backend" / "reports" / "figures" / "model_comparison.png"
+bar_chart_comparison_path = ROOT_DIR / "reports" / "figures" / "model_comparison.png"
 
 if bar_chart_comparison_path.exists():
     st.image(
